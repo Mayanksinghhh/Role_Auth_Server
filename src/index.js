@@ -18,7 +18,7 @@ app.use(cookieParser({httpOnly: true,
   sameSite: "lax"})); // Parse cookies
 app.use(express.urlencoded({ extended:true}));
 app.use(cors({
-  origin: process.env.CLIENT_ORIGIN || "http://localhost:3000",
+  origin: "*",
   credentials: true
 }));
 

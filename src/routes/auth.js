@@ -32,7 +32,12 @@ router.post("/login", async (req, res) => {
     if (!ok) return res.status(401).json({ error: "Invalid credentials" });
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
     // HttpOnly cookie
-    res.cookie("token", token, { httpOnly: true, sameSite: "lax" });
+res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,            // must be true on Vercel/Render (HTTPS)
+  sameSite: "none",        // allow cross-site cookies
+  maxAge: 24 * 60 * 60 * 1000
+});
     logActivity({ user }, "login", { email });
     return res.json({ message: "Logged in", role: user.role, name: user.name, email: user.email ,token: token });
   } catch (e) {
